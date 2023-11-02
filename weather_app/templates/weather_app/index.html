@@ -5,6 +5,15 @@
 {% block title %}{{ title }} :: {{ block.super }}{% endblock %}
 
 {% block content %}
-    <h1>Weather App</h1>
-    {{ form.as_p }}
+    <h1>Форма запиту погоди</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-primary" type="submit" value="Дізнатися"/>
+    </form>
+    {% if show_results %}
+        <h1>Погода JSON</h1>
+        {{ response_data }}
+    {% endif %}
+
 {% endblock %}
