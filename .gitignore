@@ -1,0 +1,6 @@
+.idea
+venv
+*.pyc
+*.sqlite3
+.env.development
+.env.production
