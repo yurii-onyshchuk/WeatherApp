@@ -132,4 +132,9 @@ WEATHER_API_METHOD = {
     'history': '/history.json',
     'forecast': '/forecast.json',
 }
+WEATHER_API_LIMITS = {
+    'forecast_days_limit': 14,
+    'history_days_limit': 365,
+    'max_range_for_history_request': 30,
+}
 WEATHER_API_LANGUAGE_CODE = 'uk'
