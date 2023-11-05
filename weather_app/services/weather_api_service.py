@@ -11,7 +11,11 @@ class WeatherDataProcessor:
         self.data = data
 
     def get_weather_data_from_api(self):
-        if self.data['end_date'] <= datetime.date.today():
+        if self.data['start_date'] > datetime.date.today():
+            forecast_weather_data = ForecastWeatherRetriever(self.data).get_weather_data_from_api()
+            return forecast_weather_data
+
+        elif self.data['end_date'] <= datetime.date.today():
             historical_weather_data = HistoryWeatherRetriever(self.data).get_weather_data_from_api()
             return historical_weather_data
 
@@ -41,7 +45,15 @@ class HistoryWeatherRetriever(AbstractWeatherRetriever):
 
 
 class ForecastWeatherRetriever(AbstractWeatherRetriever):
-    pass
+    def get_weather_data_from_api(self):
+        query_params = self.get_query_params()
+        response = request_to_api(settings.WEATHER_API_URL + settings.WEATHER_API_METHOD['forecast'], query_params)
+        return response
+
+    def get_query_params(self) -> dict:
+        query_params = super().get_query_params()
+        query_params.update({'days': settings.WEATHER_API_LIMITS['forecast_days_limit'], })
+        return query_params
 
 
 def request_to_api(url, params):
