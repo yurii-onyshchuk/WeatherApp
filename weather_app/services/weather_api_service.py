@@ -1,25 +1,47 @@
 import json
+import datetime
+
 import requests
 
 from django.conf import settings
 
 
-class WeatherDataRetriever:
+class WeatherDataProcessor:
+    def __init__(self, data):
+        self.data = data
+
+    def get_weather_data_from_api(self):
+        if self.data['end_date'] <= datetime.date.today():
+            historical_weather_data = HistoryWeatherRetriever(self.data).get_weather_data_from_api()
+            return historical_weather_data
+
+
+class AbstractWeatherRetriever:
     def __init__(self, data: dict):
         self.data = data
 
+    def get_query_params(self) -> dict:
+        query_params = {'key': settings.WEATHER_API_KEY,
+                        'q': self.data['city'],
+                        'lang': settings.WEATHER_API_LANGUAGE_CODE}
+        return query_params
+
+
+class HistoryWeatherRetriever(AbstractWeatherRetriever):
     def get_weather_data_from_api(self):
         query_params = self.get_query_params()
         response = request_to_api(settings.WEATHER_API_URL + settings.WEATHER_API_METHOD['history'], query_params)
         return response
 
-    def get_query_params(self):
-        query_params = {'key': settings.WEATHER_API_KEY,
-                        'q': self.data['city'],
-                        'dt': self.data['start_date'],
-                        'end_dt': self.data['end_date'],
-                        'lang': settings.WEATHER_API_LANGUAGE_CODE, }
+    def get_query_params(self) -> dict:
+        query_params = super().get_query_params()
+        query_params.update({'dt': self.data['start_date'],
+                             'end_dt': self.data['end_date']})
         return query_params
+
+
+class ForecastWeatherRetriever(AbstractWeatherRetriever):
+    pass
 
 
 def request_to_api(url, params):

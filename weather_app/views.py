@@ -1,7 +1,7 @@
 from django.views.generic import FormView
 
 from .forms import WeatherForm
-from .services.weather_api_service import WeatherDataRetriever
+from .services.weather_api_service import WeatherDataProcessor
 
 
 class Home(FormView):
@@ -12,5 +12,5 @@ class Home(FormView):
     extra_context = {'title': 'Дізнайся про погоду'}
 
     def form_valid(self, form):
-        api_weather_data = WeatherDataRetriever(form.cleaned_data).get_weather_data_from_api()
+        api_weather_data = WeatherDataProcessor(form.cleaned_data).get_weather_data_from_api()
         return self.render_to_response(self.get_context_data(form=form, api_weather_data=api_weather_data))
