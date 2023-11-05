@@ -135,6 +135,6 @@ WEATHER_API_METHOD = {
 WEATHER_API_LIMITS = {
     'forecast_days_limit': 14,
     'history_days_limit': 365,
-    'max_range_for_history_request': 30,
+    'max_days_range_for_history_request': 30,
 }
 WEATHER_API_LANGUAGE_CODE = 'uk'

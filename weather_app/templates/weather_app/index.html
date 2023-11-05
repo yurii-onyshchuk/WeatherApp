@@ -29,11 +29,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for data_point in api_weather_data.forecast.forecastday %}
-                                <tr>
-                                    <td>{{ data_point.date|fromisoformat|date:"d E Y р." }}</td>
-                                    <td>{{ data_point.day.avgtemp_c }}</td>
-                                </tr>
+                            {% for data_type, data in api_weather_data.items %}
+                                {% for forecastday in data.forecast.forecastday %}
+                                    <tr>
+                                        <td>{{ forecastday.date|fromisoformat|date:"d E Y р." }}</td>
+                                        <td>{{ forecastday.day.avgtemp_c }}</td>
+                                    </tr>
+                                {% endfor %}
                             {% endfor %}
                             </tbody>
                         </table>
