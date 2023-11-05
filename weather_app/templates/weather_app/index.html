@@ -11,35 +11,20 @@
         <div class="row gx-5">
             <div class="col-12 col-md-5 col-xl-4 mb-4">
                 <h1>Запит погоди</h1>
-                <form method="POST">
+                <form method="POST" id="city-search-form">
                     {% csrf_token %}
                     {{ form|crispy }}
-                    <input class="btn btn-primary" type="submit" value="Дізнатися"/>
+                    <div class="dropdown">
+                        <ul id="city-results" class="dropdown-menu w-100"></ul>
+                    </div>
+                    <input class="btn btn-primary m-1" type="submit" value="Дізнатися"/>
                 </form>
             </div>
             <div class="col">
                 {% if api_weather_data %}
-                    <h1>Погодні дані в м. {{ api_weather_data.location.name }}</h1>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Дата</th>
-                                <th>Температура, °C</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for data_type, data in api_weather_data.items %}
-                                {% for forecastday in data.forecast.forecastday %}
-                                    <tr>
-                                        <td>{{ forecastday.date|fromisoformat|date:"d E Y р." }}</td>
-                                        <td>{{ forecastday.day.avgtemp_c }}</td>
-                                    </tr>
-                                {% endfor %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                    {% include 'weather_app/inc/_api_table.html' %}
+                {% elif db_weather_data %}
+                    {% include 'weather_app/inc/_db_table.html' %}
                 {% endif %}
             </div>
         </div>

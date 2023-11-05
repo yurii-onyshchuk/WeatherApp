@@ -1,7 +1,6 @@
-import json
-import datetime
 import copy
-
+import datetime
+import json
 import requests
 
 from django.conf import settings
@@ -40,11 +39,10 @@ class HistoryWeatherRetriever(AbstractWeatherRetriever):
     max_days_range = settings.WEATHER_API_LIMITS['max_days_range_for_history_request']
 
     def get_weather_data_from_api(self):
-        end_date = self.data['end_date']
-        if self.data['end_date'] > datetime.date.today():
-            data = copy.deepcopy(self.data)
+        data = copy.deepcopy(self.data)
+        if data['end_date'] > datetime.date.today():
             data['end_date'] = datetime.date.today()
-        subperiod_list = split_data_period(self.data['start_date'], end_date, self.max_days_range)
+        subperiod_list = split_data_period(data['start_date'], data['end_date'], self.max_days_range)
         response_list = self.get_response_list(subperiod_list)
         result_response = response_list[0]
         if len(response_list) > 1:

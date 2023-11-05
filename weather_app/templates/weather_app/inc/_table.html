@@ -1,0 +1,15 @@
+<h1>Погодні дані в м. {% block title %}{% endblock %}</h1>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Температура, °C</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% block table_data %}{% endblock %}
+        </tbody>
+    </table>
+</div>

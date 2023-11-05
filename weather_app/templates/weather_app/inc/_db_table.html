@@ -1,0 +1,13 @@
+{% extends 'weather_app/inc/_table.html' %}
+
+{% block title %}{{ db_weather_data.0.city }}<br>(DB-інформація){% endblock %}
+
+
+{% block table_data %}
+    {% for data_point in db_weather_data %}
+        <tr>
+            <td>{{ data_point.date|date:"d E Y р." }}</td>
+            <td>{{ data_point.temperature }}</td>
+        </tr>
+    {% endfor %}
+{% endblock %}

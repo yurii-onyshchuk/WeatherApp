@@ -6,3 +6,4 @@ class WeatherAppConfig(AppConfig):
 
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'weather_app'
+    verbose_name = 'Погодні дані'

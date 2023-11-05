@@ -1,0 +1,24 @@
+{% extends 'weather_app/inc/_table.html' %}
+
+{% load custom_date %}
+
+{% block title %}
+    {% if api_weather_data.historical_weather_data.location.name %}
+        {{ api_weather_data.historical_weather_data.location.name }}
+    {% else %}
+        {{ api_weather_data.forecast_weather_data.location.name }}
+    {% endif %}
+    <br>(API-інформація)
+{% endblock %}
+
+
+{% block table_data %}
+    {% for data_type, data in api_weather_data.items %}
+        {% for forecastday in data.forecast.forecastday %}
+            <tr>
+                <td>{{ forecastday.date|fromisoformat|date:"d E Y р." }}</td>
+                <td>{{ forecastday.day.avgtemp_c }}</td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
