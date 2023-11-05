@@ -48,6 +48,17 @@ class ForecastWeatherRetriever(AbstractWeatherRetriever):
     def get_weather_data_from_api(self):
         query_params = self.get_query_params()
         response = request_to_api(settings.WEATHER_API_URL + settings.WEATHER_API_METHOD['forecast'], query_params)
+        response = self.date_filter(response)
+        return response
+
+    def date_filter(self, response):
+        forecastdays = response['forecast']['forecastday']
+        filtered_forecast = []
+        for day in forecastdays:
+            date = datetime.datetime.strptime(day['date'], "%Y-%m-%d").date()
+            if self.data['start_date'] <= date <= self.data['end_date']:
+                filtered_forecast.append(day)
+        response['forecast']['forecastday'] = filtered_forecast
         return response
 
     def get_query_params(self) -> dict:
