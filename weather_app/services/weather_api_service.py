@@ -1,5 +1,6 @@
 import json
 import datetime
+import copy
 
 import requests
 
@@ -19,8 +20,8 @@ class WeatherDataProcessor:
         else:
             self.forecast_weather_data = ForecastWeatherRetriever(self.data).get_weather_data_from_api()
             self.historical_weather_data = HistoryWeatherRetriever(self.data).get_weather_data_from_api()
-        return {'forecast_weather_data': self.forecast_weather_data,
-                'historical_weather_data': self.historical_weather_data}
+        return {'historical_weather_data': self.historical_weather_data,
+                'forecast_weather_data': self.forecast_weather_data, }
 
 
 class AbstractWeatherRetriever:
@@ -39,7 +40,11 @@ class HistoryWeatherRetriever(AbstractWeatherRetriever):
     max_days_range = settings.WEATHER_API_LIMITS['max_days_range_for_history_request']
 
     def get_weather_data_from_api(self):
-        subperiod_list = split_data_period(self.data['start_date'], self.data['end_date'], self.max_days_range)
+        end_date = self.data['end_date']
+        if self.data['end_date'] > datetime.date.today():
+            data = copy.deepcopy(self.data)
+            data['end_date'] = datetime.date.today()
+        subperiod_list = split_data_period(self.data['start_date'], end_date, self.max_days_range)
         response_list = self.get_response_list(subperiod_list)
         result_response = response_list[0]
         if len(response_list) > 1:
@@ -78,7 +83,7 @@ class ForecastWeatherRetriever(AbstractWeatherRetriever):
         filtered_forecast = []
         for day in forecastdays:
             date = datetime.datetime.strptime(day['date'], "%Y-%m-%d").date()
-            if self.data['start_date'] <= date <= self.data['end_date']:
+            if self.data['start_date'] <= date <= self.data['end_date'] and datetime.date.today() < date:
                 filtered_forecast.append(day)
         response['forecast']['forecastday'] = filtered_forecast
         return response
