@@ -121,4 +121,10 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'Weather', 'static')]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
-WEATHER_API_URL = 'https://api.weatherapi.com/v1/current.json'
+WEATHER_API_URL = 'https://api.weatherapi.com/v1'
+
+WEATHER_API_METHOD = {
+    'history': '/history.json',
+    'forecast': '/forecast.json',
+}
+WEATHER_API_LANGUAGE_CODE = 'uk'

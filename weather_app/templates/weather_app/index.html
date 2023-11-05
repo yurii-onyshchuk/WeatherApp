@@ -5,15 +5,37 @@
 {% block title %}{{ title }} :: {{ block.super }}{% endblock %}
 
 {% block content %}
-    <h1>Форма запиту погоди</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn btn-primary" type="submit" value="Дізнатися"/>
-    </form>
-    {% if show_results %}
-        <h1>Погода JSON</h1>
-        {{ response_data }}
-    {% endif %}
-
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h1>Форма запиту погоди</h1>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input class="btn btn-primary" type="submit" value="Дізнатися"/>
+                </form>
+            </div>
+            <div class="col-6">
+                <h1>Погода в м.{{ api_weather_data.location.name }}</h1>
+                <div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Температура, °C</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for data_point in api_weather_data.forecast.forecastday %}
+                            <tr>
+                                <td>{{ data_point.date }}</td>
+                                <td>{{ data_point.day.avgtemp_c }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
