@@ -1,8 +1,11 @@
+import json
+
+from django.http import JsonResponse, Http404
 from django.views.generic import FormView
 
 from .forms import WeatherForm
 from .models import WeatherData
-from .services.weather_api_service import WeatherDataProcessor
+from .services.weather_api_service import WeatherDataProcessor, Autocomplete
 
 
 class Home(FormView):
@@ -20,3 +23,12 @@ class Home(FormView):
             api_weather_data = WeatherDataProcessor(form.cleaned_data).get_weather_data_from_api()
             WeatherData.save_api_weather_data(api_weather_data)
             return self.render_to_response(self.get_context_data(form=form, api_weather_data=api_weather_data))
+
+
+def autocomplete(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        autocomplete_data = Autocomplete({'city': data.get('query')}).get_autocomplete_data()
+        return JsonResponse(autocomplete_data, safe=False)
+    else:
+        raise Http404()

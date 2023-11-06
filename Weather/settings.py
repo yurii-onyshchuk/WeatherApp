@@ -131,6 +131,7 @@ WEATHER_API_URL = 'https://api.weatherapi.com/v1'
 WEATHER_API_METHOD = {
     'history': '/history.json',
     'forecast': '/forecast.json',
+    'search': '/search.json',
 }
 WEATHER_API_LIMITS = {
     'forecast_days_limit': 14,

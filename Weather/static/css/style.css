@@ -1,0 +1,9 @@
+.dropdown-item:hover {
+    cursor: pointer;
+    background-color: #e9ecef;
+}
+
+.dropdown-item:active {
+    cursor: pointer;
+    background-color: #cfcfd3;
+}
