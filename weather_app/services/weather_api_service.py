@@ -178,7 +178,6 @@ def split_data_period(start_date: datetime.date, end_date: datetime.date, interv
 def request_to_api(url: str, params: dict):
     """Send a request to an external API and return the response"""
     response = requests.get(url, params)
-    print(response.url)
     if response.status_code == 200:
         return json.loads(response.text)
     else:

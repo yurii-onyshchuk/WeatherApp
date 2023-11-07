@@ -1,7 +1,6 @@
 {% extends 'weather_app/inc/_table.html' %}
 
-{% block title %}{{ db_weather_data.0.city }}<br>(DB-інформація){% endblock %}
-
+{% block title %} {{ db_weather_data.0.city }}{% endblock %}
 
 {% block table_data %}
     {% for data_point in db_weather_data %}

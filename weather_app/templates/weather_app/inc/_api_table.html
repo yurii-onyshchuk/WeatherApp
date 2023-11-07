@@ -8,9 +8,7 @@
     {% else %}
         {{ api_weather_data.forecast_weather_data.location.name }}
     {% endif %}
-    <br>(API-інформація)
 {% endblock %}
-
 
 {% block table_data %}
     {% for data_type, data in api_weather_data.items %}
