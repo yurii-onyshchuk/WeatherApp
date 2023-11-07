@@ -5,6 +5,12 @@ from django.urls import reverse
 
 
 class WeatherDataProcessorTestCase(TestCase):
+    """Test case class for testing the WeatherDataProcessor functionality.
+
+    This class contains test methods to verify the behavior of the WeatherDataProcessor when querying weather data
+    with various date ranges.
+    """
+
     today = datetime.date.today()
 
     def test_dates_before_today(self):
@@ -46,7 +52,12 @@ class WeatherDataProcessorTestCase(TestCase):
         end_date = self.today + datetime.timedelta(days=7)
         self.execute_date_test(start_date, end_date, 'forecast_weather_data')
 
-    def execute_date_test(self, start_date, end_date, *expected_keys):
+    def execute_date_test(self, start_date: datetime.date, end_date: datetime.date, *expected_keys: str):
+        """ Helper method to execute a date-based test.
+
+        This method sends a POST request to the home URL with the specified date range and city
+        and checks if the fetched weather data matches the expectations.
+        """
         data = {'start_date': start_date, 'end_date': end_date, 'city': 'Kyiv', }
         url = reverse('home')
         response = self.client.post(url, data)

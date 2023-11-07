@@ -18,7 +18,12 @@ class WeatherData(models.Model):
         verbose_name_plural = 'Погодні дані'
 
     @classmethod
-    def get_data_according_to_form(cls, data: dict):
+    def get_data_according_to_form(cls, data: dict) -> models.QuerySet | None:
+        """ Retrieve weather data from the database based on user input.
+
+        If only ALL the required data is three-digit in the database, then they return.
+        Otherwise, nothing is returned.
+        """
         db_weather_data = cls.objects.filter(city=data['city'], date__range=(data['start_date'], data['end_date']))
         date_range = [data['start_date'] + datetime.timedelta(days=i)
                       for i in range((data['end_date'] - data['start_date']).days + 1)]
@@ -26,7 +31,12 @@ class WeatherData(models.Model):
             return db_weather_data
 
     @classmethod
-    def save_api_weather_data(cls, data: dict):
+    def save_api_weather_data(cls, data: dict) -> None:
+        """Save weather data from an external API to the database.
+
+        This method extracts relevant data from the API response
+        and saves it as WeatherData records in the database.
+        """
         weather_data_list = []
         for weather_data_type, value in data.items():
             if value:
