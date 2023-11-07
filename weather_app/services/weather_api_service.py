@@ -92,7 +92,22 @@ class ForecastWeatherRetriever(AbstractWeatherRetriever):
         return query_params
 
 
-def split_data_period(start_date, end_date, interval_in_day: int) -> list[dict]:
+class CitySearcher(AbstractWeatherAPIRetriever):
+    """Class to search for city names and retrieve city-related data from an external API."""
+
+    api_method = settings.WEATHER_API_METHOD['search']
+
+    def get_data_from_API(self) -> dict:
+        """Fetch city name suggestions based on user input.
+
+        This method queries an external API to retrieve city name
+        suggestions matching the user's input.
+        """
+        return self.get_response()
+
+
+def split_data_period(start_date: datetime.date, end_date: datetime.date, interval_in_day: int) -> list[dict]:
+    """Split a date range into subperiods based on a specified interval."""
     if end_date - start_date < datetime.timedelta(interval_in_day):
         return [{'start_date': start_date, 'end_date': end_date}, ]
     subperiod_list = []

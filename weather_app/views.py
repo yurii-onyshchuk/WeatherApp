@@ -29,7 +29,7 @@ class Home(FormView):
 def autocomplete(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        autocomplete_data = Autocomplete({'city': data.get('query')}).get_autocomplete_data()
+        autocomplete_data = CitySearcher({'city': data.get('query')}).get_data_from_API()
         return JsonResponse(autocomplete_data, safe=False)
     else:
         raise Http404()
